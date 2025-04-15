@@ -1,0 +1,174 @@
+import random
+#name: travel
+#purpose: counting down how many miles user has left
+#argument: none
+#return: none
+def travel():
+    global MILES
+    MILES = MILES - (random.randrange(30,60))
+    print("You have this many miles left: " + str(MILES))
+    for i in range(random.randrange(3,7)):
+        add_day(months_with_31_days)
+
+#name: rest
+#purpose: increasing health
+#argument: nones
+#return: none
+def rest():
+    global HEALTH
+    if HEALTH < 5:
+        HEALTH += 1
+        print("Your health just went back up!")
+        for i in range(random.randrange(2,5)):
+            add_day(months_with_31_days)
+    else:
+        print("You have the maximum health of 5, you cannot rest")
+    print("Health: "+ str(HEALTH))
+
+#name: hunt
+#purpose: carry food throughout the entire trip
+#argument: none
+#return: none
+def hunt():
+    global FOOD
+    FOOD += 100
+    print("Current food: " + str(FOOD))
+    for i in range(random.randrange(2,5)):
+        add_day(months_with_31_days)
+
+#name: status
+#purpose: to give user their current status
+#argument: none
+#return: none
+def status():
+    global CURRENT_DAY, CURRENT_MONTH, MILES, FOOD, HEALTH
+    print("Today's Date: " + str(CURRENT_MONTH) + "/" + str(CURRENT_DAY))
+    print("Miles to go: " + str(MILES))
+    print("Food you have left: " + str(FOOD))
+    print("Current Health: " + str(HEALTH))
+
+#name: help
+#purpose: to give user all commands again/introduction
+#argument: none
+#return: none
+def help():
+    print("You have selected the action help. In this game you will be traveling\n\
+    2000 miles on the Oregon Trail. While traveling you'll face many challenges.\n\
+    you have 5 actions to chose from. The 5 are travel, rest, hunt, check status,\n\
+    ask for help, and you can chose to quit the game. Your goal of the game is to\n\
+    travel all 2000 miles without dying.")
+
+#name: quit
+#purpose: option for user to quit/pause the game
+#argument: none
+#return: none
+def quit():
+    return False
+    print("You have decided to end the game, here is the progress that you have made: ")
+    status()
+
+
+
+
+
+
+#name: add_day
+#purpose: adds a day each time player continues
+#argument: none
+#return: none
+def add_day(list):
+    global CURRENT_DAY, CURRENT_MONTH, FOOD, HEALTH, alive, randomday, randomday2
+    if alive == True:
+        CURRENT_DAY += 1
+        if CURRENT_MONTH in months_with_31_days:
+            if CURRENT_DAY == 32:
+                CURRENT_MONTH += 1
+                CURRENT_DAY = 1
+                randomday = random.randint(1,15)
+                randomday2 = random.randint(16,30)
+        else:
+            CURRENT_DAY == 31
+            CURRENT_MONTH += 1
+            CURRENT_DAY = 1
+            randomday = random.randint(1,15)
+            randomday2 = random.randint(16,30)
+        if CURRENT_DAY == randomday or CURRENT_DAY == randomday2:
+            HEALTH -= 1
+            print("Your health randomly decreased, try to get it back up")
+        if FOOD <= 0:
+            print("You have died due to starvation")
+            alive = False
+        else:
+            FOOD -= 5
+        if CURRENT_MONTH >= 12 and CURRENT_DAY == 31:
+            alive = False
+            CURRENT_DAY = CURRENT_DAY - 1
+            print("You have died due to running out of time")
+        if HEALTH <= 0:
+            alive = False
+            print("You have died due to having no health")
+
+
+
+#name: select_action
+#purpose: for user to pick what they want
+#argument: none
+#return: none
+def select_action():
+    global alive
+    userinput = str(input("What would you like to do? Your options are travel, hunt, quit, help,\n\
+    status, or rest. Please enter one: "))
+    if userinput == "travel":
+        travel()
+    elif userinput == "hunt":
+        hunt()
+    elif userinput == "quit":
+        alive = quit()
+    elif userinput == "help":
+        help()
+    elif userinput == "status":
+        status()
+    elif userinput == "rest":
+        rest()
+    else:
+        print("Please enter a valid response")
+
+
+
+#MAIN CODE STARTS HERE
+#global variables in code
+global CURRENT_DAY
+global CURRENT_MONTH
+global TRAVEL
+global FOOD
+global HEALTH
+global alive
+global randomday
+global randomday2
+
+#setting values to variables
+randomday = random.randint(1,15)
+randomday2 = random.randint(16,30)
+CURRENT_DAY = 1
+CURRENT_MONTH = 3
+MILES = 2000
+FOOD = 500
+HEALTH = 5
+months_with_31_days = [1,3,5,7,8,10,12]
+alive = True
+
+
+#INTRODUCTION TO GAME
+print("In this game you will be playing the Oregon trail. You will be traveling 2000 miles on the Oregon Trail.\n\
+    While traveling you'll face many challenges, you have 5 actions to chose from. The 5 are \n\
+    travel, rest, hunt, check status,ask for help, and you can chose to quit the game. Your goal of the game \n\
+    is to travel all 2000 miles without dying.")
+
+#WHILE LOOP FOR GAME TO START
+while alive == True:
+    select_action()
+    if MILES == 0:
+        alive == False
+        print("You have no more miles left, you have completed the game.")
+
+
